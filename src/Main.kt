@@ -1,14 +1,35 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-fun main() {
-    val name = "Kotlin"
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    println("Hello, $name!")
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
 
-    for (i in 1..5) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        println("i = $i")
+fun main() {
+    // measuring the time it takes to run this code
+    val codeTime = measureTimeMillis {
+        // runBlocking is synchronous; waits for all the code in its body to finish before returning to the main function
+        // that means for "Sunny" to be printed, it has to wait for the 1 seconds delay & so does the
+        runBlocking {
+            println("Weather forecast:")
+            printForecast()
+            printTemperature()
+        }
     }
+
+    //printing the time taken to run the code in seconds
+    println("Code execution time is: ${codeTime / 1000.0} seconds")
 }
+
+// a suspend function is a function that can pause and resume its functionality from where it last left off
+// suspend functions like delay should be called in other suspend functions that offer suspend functionality or in coroutines
+suspend fun printForecast() {
+    delay(1000)
+    println("Cold")
+}
+
+suspend fun printTemperature() {
+    delay(1000)
+    println("15\u00b0C")
+}
+
+/**
+ * in a coroutine, when the code suspends(pauses), the coroutines shares the event loop allowing other code to be run
+ * delay is an example of a coroutine suspend function. Other code can run once in delay mode
+ */
